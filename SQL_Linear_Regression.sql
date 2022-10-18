@@ -16,20 +16,20 @@ FROM (
 		FROM (
 			SELECT *,
 			ROUND(1-(SSr/SSt), 4) AS R2,
-      ROUND((6 * (Slope + (@tValue * StdError)) + Intercept), 2) As UpperBound,
+      			ROUND((6 * (Slope + (@tValue * StdError)) + Intercept), 2) As UpperBound,
 			ROUND((6 * (Slope - (@tValue * StdError)) + Intercept), 2) AS LowBound,
-      ROUND(AVG_ANNUAL_SALE + (1.638 * StdError), 2) As UpperBoundAVG,
+      			ROUND(AVG_ANNUAL_SALE + (1.638 * StdError), 2) As UpperBoundAVG,
 			ROUND(AVG_ANNUAL_SALE - (1.638 * StdError), 2) AS LowBoundAVG
 			FROM (    
 				SELECT *,
-        S / sqrt(SSxx) AS StdError,
+        			S / sqrt(SSxx) AS StdError,
 				power(SALE_17 - AVG_ANNUAL_SALE, 2) + power(SALE_18 - AVG_ANNUAL_SALE, 2) + power(SALE_19 - AVG_ANNUAL_SALE, 2) + power(SALE_20 - AVG_ANNUAL_SALE, 2) + power(SALE_21 - AVG_ANNUAL_SALE, 2) AS SST,
 				power(SALE_17 - ((Slope*1)+Intercept), 2) + power(SALE_18 - ((Slope*2)+Intercept), 2) + power(SALE_19 - ((Slope*3)+Intercept), 2) + power(SALE_20 - ((Slope*4)+Intercept), 2) + power(SALE_21 - ((Slope*5)+Intercept), 2) AS SSR 
 				FROM (
 					SELECT *,
 					(Sy - Slope * Sx)  / 5 AS Intercept,
 					sqrt((SSyy - ((SSxy/SSxx) * SSxy)) / (3)) AS S,
-          SSyy - ((SSxy/SSxx)*SSxy)  as SSE
+          				SSyy - ((SSxy/SSxx)*SSxy)  as SSE
 					FROM (
 						SELECT *,
 						((5 * Sxy) - (Sx * Sy)) / (5 * Sx2 - (power(Sx, 2))) as Slope,
